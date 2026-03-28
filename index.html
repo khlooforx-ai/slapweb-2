@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SlapWeb - التجربة الكاملة</title>
+    <style>
+        body { margin: 0; background: #0b0e14; color: white; font-family: 'Segoe UI', sans-serif; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; touch-action: manipulation; }
+        #canvas-container { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: background 0.1s; }
+        .emoji { font-size: 120px; cursor: pointer; user-select: none; transition: transform 0.1s; }
+        .emoji:active { transform: scale(1.4) rotate(15deg); }
+        .instruction { position: absolute; bottom: 20%; font-size: 18px; opacity: 0.6; }
+        .hit { background: #ff4757 !important; }
+    </style>
+</head>
+<body onclick="slapDevice()">
+
+    <div id="canvas-container">
+        <div class="emoji" id="face">😐</div>
+        <div class="instruction">اضغط أو "اصفع" الشاشة لسماع الصوت!</div>
+    </div>
+
+    <script>
+        // مصفوفة الأصوات (روابط مباشرة لملفات خفيفة جداً لضمان السرعة)
+        const sounds = [
+            'https://www.myinstants.com/media/sounds/slap-sound-effect-1.mp3',
+            'https://www.myinstants.com/media/sounds/classic_hurt.mp3'
+        ];
+
+        function slapDevice() {
+            const container = document.getElementById('canvas-container');
+            const face = document.getElementById('face');
+            
+            // تغيير التعبير واللون
+            face.innerText = '😫';
+            container.classList.add('hit');
+            
+            // تشغيل الصوت
+            const audio = new Audio(sounds[Math.floor(Math.random() * sounds.length)]);
+            audio.play().catch(e => console.log("تحتاج للمس الشاشة أولاً لتفعيل الصوت"));
+
+            // اهتزاز الهاتف (ميزة رائعة لـ S9+)
+            if (navigator.vibrate) { navigator.vibrate([50, 30, 50]); }
+
+            // العودة للحالة الطبيعية بعد 200 ملي ثانية
+            setTimeout(() => {
+                face.innerText = '😐';
+                container.classList.remove('hit');
+            }, 200);
+        }
+    </script>
+</body>
+</html>
